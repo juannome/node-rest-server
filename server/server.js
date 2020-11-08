@@ -40,7 +40,7 @@ app.put('/usuario/:id', function(req, res) {
     );
 });
 app.delete('/usuario', function(req, res) {
-    res.json('Delete usuario');
+    res.json('Delete usuarios');
 });
 app.listen(process.env.PORT, () => {
     console.log('Escuchado  puerto ', process.env.PORT);
