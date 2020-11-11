@@ -11,15 +11,15 @@ const usuario = require('../models/usuario');
 
 app.get('/usuario', function(req, res) {
     // skip
-    // let desde = req.query.desde || 0;
-    // desde = Number(desde);
-    //Limite
-    // let limite = req.query.limite || 5;
-    // limite = Number(limite);
+    let desde = req.query.desde || 0;
+    desde = Number(desde);
+    // Limite
+    let limite = req.query.limite || 5;
+    limite = Number(limite);
 
     Usuario.find({ status: true }, 'nombre email role status google')
-        // .skip(desde)
-        // .limit(limite)
+        .skip(desde)
+        .limit(limite)
         .exec((err, usuarios) => {
             if (err) {
                 return res.status(400).json({
