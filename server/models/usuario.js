@@ -44,6 +44,7 @@ let usuarioSchema = new Schema({
     }
 });
 
+//======= Se excluye la password para que no aparezca visualmente al usuario ======//
 usuarioSchema.methods.toJSON = function() {
 
     let user = this;
