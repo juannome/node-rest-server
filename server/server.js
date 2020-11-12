@@ -4,6 +4,8 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 
+//Paquete que trae node para hacer direccionar 
+const path = require('path');
 //============ configuracion =========//
 require('./config/config');
 // parse application/x-www-form-urlencoded
@@ -12,10 +14,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 
+//Habilitar carpeta Public para ser accedida
+//Se debe implementar el middleware de expreess + path para hacer publico todo el directorio
 
-
-
-
+app.use(express.static(path.resolve(__dirname, '../public')));
 
 
 //=====Se configuran globalmente las rutas ======//
