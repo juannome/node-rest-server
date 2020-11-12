@@ -2,6 +2,8 @@
 const express = require('express');
 //De aqui se crearan Objetos con la palabra new -- Se usa mayuscula porque es estandar de nomenclatura Se importa el modelo(el usuarioSchema de la carpeta model)
 const Usuario = require('../models/usuario');
+const { verificaToken, verificaAdmin_Role } = require('../middlewares/autenticacion');
+
 //===========================//
 const app = express();
 //========================================================================================//
@@ -10,14 +12,19 @@ const bcrypt = require('bcrypt');
 //========================================================================================//
 // Underscore " _ ": Libreria con funcionalidades 
 const _ = require('underscore');
-const { connection } = require('mongoose');
+
 
 
 
 //========================================================================================//
 //================================   GET     ============================================//
 //======================================================================================//
-app.get('/usuario', function(req, res) {
+
+
+// El middleware va entre el primer argumento ('/usuario') y el callback  (req, res)
+
+//No se esta ejecutando la funcion del middleware, se esta indicando que ese es el middleware que se disparara cuando se quiera accesar esa ruta
+app.get('/usuario', verificaToken, (req, res) => {
     //let desde que registro quiere, parametros opcionales caen dentro de un Objeto en el req llamado .query ===> req.query
     let desde = req.query.desde || 0;
     desde = Number(desde);
@@ -54,7 +61,7 @@ app.get('/usuario', function(req, res) {
 //========================================================================================//
 //================================   POST    ============================================//
 //======================================================================================//
-app.post('/usuario', function(req, res) {
+app.post('/usuario', [verificaToken, verificaAdmin_Role], (req, res) => {
 
     let body = req.body;
 
@@ -88,7 +95,7 @@ app.post('/usuario', function(req, res) {
 //========================================================================================//
 //=================================   PUT    ============================================//
 //======================================================================================//
-app.put('/usuario/:id', function(req, res) {
+app.put('/usuario/:id', [verificaToken, verificaAdmin_Role], (req, res) => {
 
     let id = req.params.id;
     // pick - Este regresa una copia del objeto filtrando solo los valores que yo quiero
@@ -140,7 +147,7 @@ app.put('/usuario/:id', function(req, res) {
 ///============================   DELETE CAMBIO_STATUS  =================================///
 ///=======================================================================================///
 
-app.delete('/usuario/:id', function(req, res) {
+app.delete('/usuario/:id', [verificaToken, verificaAdmin_Role], (req, res) => {
     let id = req.params.id;
     // Aprovechando las propiedades del findByIdAndUpdate se usa  $set: { 'status': false } para cambiar status en este caso de true a false 
     Usuario.findByIdAndUpdate(id, { $set: { 'status': false }, new: true }, (err, usuarioBorrado) => {
