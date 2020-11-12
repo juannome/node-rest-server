@@ -25,7 +25,7 @@ const _ = require('underscore');
 
 //No se esta ejecutando la funcion del middleware, se esta indicando que ese es el middleware que se disparara cuando se quiera accesar esa ruta
 app.get('/usuario', verificaToken, (req, res) => {
-    //let desde que registro quiere, parametros opcionales caen dentro de un Objeto en el req llamado .query ===> req.query
+    //desde que registro quiere, parametros opcionales caen dentro de un Objeto en el req llamado .query ===> req.query
     let desde = req.query.desde || 0;
     desde = Number(desde);
     //Limite hasta que registro  si no especifico tomara 5, parametros opcionales caen dentro de un Objeto en el req llamado .query ===> req.query
