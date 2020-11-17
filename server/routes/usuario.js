@@ -1,9 +1,9 @@
 //============================Requires ================//
 const express = require('express');
 //De aqui se crearan Objetos con la palabra new -- Se usa mayuscula porque es estandar de nomenclatura Se importa el modelo(el usuarioSchema de la carpeta model)
-const Usuario = require('../models/usuario');
-const { verificaToken, verificaAdmin_Role } = require('../middlewares/autenticacion');
 
+const { verificaToken, verificaAdmin_Role } = require('../middlewares/autenticacion');
+const Usuario = require('../models/usuario');
 //===========================//
 const app = express();
 //========================================================================================//
@@ -12,7 +12,6 @@ const bcrypt = require('bcrypt');
 //========================================================================================//
 // Underscore " _ ": Libreria con funcionalidades 
 const _ = require('underscore');
-
 
 
 
@@ -55,12 +54,11 @@ app.get('/usuario', verificaToken, (req, res) => {
             });
 
         });
-
-
 });
 //========================================================================================//
 //================================   POST    ============================================//
 //======================================================================================//
+
 app.post('/usuario', [verificaToken, verificaAdmin_Role], (req, res) => {
 
     let body = req.body;
@@ -95,6 +93,7 @@ app.post('/usuario', [verificaToken, verificaAdmin_Role], (req, res) => {
 //========================================================================================//
 //=================================   PUT    ============================================//
 //======================================================================================//
+
 app.put('/usuario/:id', [verificaToken, verificaAdmin_Role], (req, res) => {
 
     let id = req.params.id;
@@ -116,45 +115,25 @@ app.put('/usuario/:id', [verificaToken, verificaAdmin_Role], (req, res) => {
     });
 });
 
+
 //========================================================================================//
 //=======================   DELETE - ELIMINA_REGISTRO  ==================================//
 //======================================================================================//
-// app.delete('/usuario/:id', function(req, res) {
-//     let id = req.params.id;
-//     Usuario.findByIdAndRemove(id, (err, usuarioBorrado) => {
-//         if (err) {
-//             return res.status(400).json({
-//                 ok: false,
-//                 err
-//             });
-//         }
-//         if (!usuarioBorrado) {
-//             return res.status(400).json({
-//                 ok: false,
-//                 err: {
-//                     message: 'Usuario no encontrado'
-//                 }
-//             });
-//         }
-//         res.json({
-//             ok: true,
-//             usuario: usuarioBorrado
-//         });
-//     });
-// });
-
-///=======================================================================================///
-///============================   DELETE CAMBIO_STATUS  =================================///
-///=======================================================================================///
-
-app.delete('/usuario/:id', [verificaToken, verificaAdmin_Role], (req, res) => {
+app.delete('/usuario/:id', function(req, res) {
     let id = req.params.id;
-    // Aprovechando las propiedades del findByIdAndUpdate se usa  $set: { 'status': false } para cambiar status en este caso de true a false 
-    Usuario.findByIdAndUpdate(id, { $set: { 'status': false }, new: true }, (err, usuarioBorrado) => {
+    Usuario.findByIdAndRemove(id, (err, usuarioBorrado) => {
         if (err) {
             return res.status(400).json({
                 ok: false,
                 err
+            });
+        }
+        if (!usuarioBorrado) {
+            return res.status(400).json({
+                ok: false,
+                err: {
+                    message: 'Usuario no encontrado'
+                }
             });
         }
         res.json({
@@ -163,6 +142,27 @@ app.delete('/usuario/:id', [verificaToken, verificaAdmin_Role], (req, res) => {
         });
     });
 });
+
+///=======================================================================================///
+///============================   DELETE CAMBIO_STATUS  =================================///
+///=======================================================================================///
+
+// app.delete('/usuario/:id', [verificaToken, verificaAdmin_Role], (req, res) => {
+//     let id = req.params.id;
+//     // Aprovechando las propiedades del findByIdAndUpdate se usa  $set: { 'status': false } para cambiar status en este caso de true a false 
+//     Usuario.findByIdAndUpdate(id, { $set: { 'status': false }, new: true }, (err, usuarioBorrado) => {
+//         if (err) {
+//             return res.status(400).json({
+//                 ok: false,
+//                 err
+//             });
+//         }
+//         res.json({
+//             ok: true,
+//             usuario: usuarioBorrado
+//         });
+//     });
+// });
 
 
 module.exports = app;

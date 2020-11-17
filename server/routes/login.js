@@ -11,8 +11,6 @@ const client = new OAuth2Client(process.env.CLIENT_ID);
 
 
 const Usuario = require('../models/usuario');
-const e = require('express');
-const { response } = require('express');
 const app = express();
 
 
@@ -159,11 +157,6 @@ app.post('/google', async(req, res) => {
         }
     });
 });
-
-
-
-
-
 
 
 
